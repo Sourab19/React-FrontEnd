@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 export default function DefinitionSearch(){
     const [word, setWord] = useState("");
     const navigate = useNavigate();
+    
   
     return (
       <form

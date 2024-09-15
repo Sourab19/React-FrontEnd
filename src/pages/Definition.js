@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLocation } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import NotFound from "../components/NotFound";
@@ -11,6 +11,7 @@ export default function Definition() {
 
   let { search } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     // const url = "https://httpstat.us/501";
@@ -20,15 +21,19 @@ export default function Definition() {
         if (response.status === 404) {
           setNotFound(true);
         } else if (response.status === 401) {
-          navigate("/login");
+          navigate("/login", {
+            state: {
+              previousUrl: location.pathname,
+            },
+          });
         } else if (response.status === 500) {
           setError(true);
         }
 
-        if(!response.ok){
+        if (!response.ok) {
           setError(true);
 
-          throw new Error('Something went wrong');
+          throw new Error("Something went wrong");
         }
 
         return response.json();
@@ -39,8 +44,7 @@ export default function Definition() {
         }
       })
       .catch(() => {
-
-        console.log('Something went wrong!');
+        console.log("Something went wrong!");
       });
   }, []);
 
